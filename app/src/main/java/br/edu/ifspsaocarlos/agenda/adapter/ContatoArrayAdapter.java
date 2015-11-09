@@ -29,11 +29,7 @@ public class ContatoArrayAdapter extends ArrayAdapter <Contato>  {
         this.inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-    /*Quando a ListView usa o adapter para popular suas views, o método getView()
-     * é chamado para cada célula. O parâmetro convertView é uma forma do adapter
-     * reusar/reciclar views antigas. Desta forma, a ListView pode enviar ao adapter
-     * views que não estão sendo mais usadas, em vez de instanciar novas.
-      */
+
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
