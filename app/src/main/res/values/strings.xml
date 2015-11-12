@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Agenda</string>
     <string name="search_hint">Buscar contato</string>
-    <string name="title_activity_detalhe">Detalhes</string>
+    <string name="title_activity_detalhe">Novo contato</string>
 </resources>

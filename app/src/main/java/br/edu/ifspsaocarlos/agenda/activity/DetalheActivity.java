@@ -28,6 +28,7 @@ public class DetalheActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("contact"))
         {
+
             this.c = (Contato) getIntent().getSerializableExtra("contact");
             EditText nameText = (EditText)findViewById(R.id.editText1);
             nameText.setText(c.getNome());
@@ -38,7 +39,13 @@ public class DetalheActivity extends AppCompatActivity {
             EditText emailText = (EditText)findViewById(R.id.editText3);
             emailText.setText(c.getEmail());
 
+            int pos =c.getNome().indexOf(" ");
+            if (pos==-1)
+                pos=c.getNome().length();
+
+            setTitle(c.getNome().substring(0,pos));
         }
+
 
         cDAO = new ContatoDAO(this);
 
