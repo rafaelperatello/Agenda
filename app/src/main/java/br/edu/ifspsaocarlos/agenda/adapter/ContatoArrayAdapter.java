@@ -37,6 +37,7 @@ public class ContatoArrayAdapter extends ArrayAdapter <Contato>  {
             convertView = inflater.inflate(R.layout.contato_celula, null);
             holder = new ViewHolder();
             holder.nome = (TextView) convertView.findViewById(R.id.nome);
+            holder.telefone = (TextView) convertView.findViewById(R.id.fone);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -44,11 +45,13 @@ public class ContatoArrayAdapter extends ArrayAdapter <Contato>  {
 
         Contato c = getItem(position);
         holder.nome.setText(c.getNome());
+        holder.telefone.setText(c.getFone());
         return convertView;
     }
 
     static class ViewHolder {
         public TextView nome;
+        public TextView telefone;
     }
 
 
