@@ -41,9 +41,19 @@ public class ContatoDAO {
     {
         database=dbHelper.getReadableDatabase();
         List<Contato> contacts = new ArrayList<Contato>();
-        Cursor cursor = database.query(SQLiteHelper.DATABASE_TABLE, new String[] { SQLiteHelper.KEY_ID,
-                        SQLiteHelper.KEY_NAME, SQLiteHelper.KEY_FONE, SQLiteHelper.KEY_EMAIL}, SQLiteHelper.KEY_NAME + " like ? or " + SQLiteHelper.KEY_FONE + " = ?", new String[] { nome+"%", nome },
-                null, null, SQLiteHelper.KEY_NAME);
+
+        Cursor cursor = database.query(SQLiteHelper.DATABASE_TABLE,
+                new String[] {
+                        SQLiteHelper.KEY_ID,
+                        SQLiteHelper.KEY_NAME,
+                        SQLiteHelper.KEY_FONE,
+                        SQLiteHelper.KEY_EMAIL},
+                SQLiteHelper.KEY_NAME + " like ? or " + SQLiteHelper.KEY_FONE + " = ? or " + SQLiteHelper.KEY_EMAIL + " like ?",
+                new String[] { "%" + nome + "%", nome, "%" + nome + "%" },
+                null,
+                null,
+                SQLiteHelper.KEY_NAME);
+
         if (cursor!=null)
         {
             cursor.moveToFirst();

@@ -111,7 +111,6 @@ public class BaseActivity extends AppCompatActivity {
         List<Contato> values = cDAO.buscaContato(query);
         adapter= new ContatoArrayAdapter(this, values);
         list.setAdapter(adapter);
-
     }
 
 }
