@@ -8,6 +8,7 @@ public class Contato implements Serializable {
     private String nome;
     private String fone;
     private String fone2;
+    private String birthday;
     private String email;
 
     public Contato() {
@@ -51,5 +52,13 @@ public class Contato implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }
