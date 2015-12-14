@@ -40,6 +40,9 @@ public class DetalheActivity extends AppCompatActivity {
             EditText emailText = (EditText)findViewById(R.id.editText3);
             emailText.setText(c.getEmail());
 
+            EditText birthdayText = (EditText)findViewById(R.id.editTextBirthday);
+            birthdayText.setText(c.getBirthday());
+
             int pos =c.getNome().indexOf(" ");
             if (pos==-1)
                 pos=c.getNome().length();
@@ -91,6 +94,7 @@ public class DetalheActivity extends AppCompatActivity {
         String fone = ((EditText) findViewById(R.id.editText2)).getText().toString();
         String fone2 = ((EditText) findViewById(R.id.editTextFone2)).getText().toString();
         String email = ((EditText) findViewById(R.id.editText3)).getText().toString();
+        String birthday = ((EditText) findViewById(R.id.editTextBirthday)).getText().toString();
 
         if (c==null)
         {
@@ -99,6 +103,7 @@ public class DetalheActivity extends AppCompatActivity {
             c.setFone(fone);
             c.setFone2(fone2);
             c.setEmail(email);
+            c.setBirthday(birthday);
 
             cDAO.createContact(c);
             Toast.makeText(this, "Incluído com sucesso", Toast.LENGTH_SHORT).show();
@@ -109,6 +114,7 @@ public class DetalheActivity extends AppCompatActivity {
             c.setFone(fone);
             c.setFone2(fone2);
             c.setEmail(email);
+            c.setBirthday(birthday);
 
             cDAO.updateContact(c);
             Toast.makeText(this, "Alterado com sucesso", Toast.LENGTH_SHORT).show();
