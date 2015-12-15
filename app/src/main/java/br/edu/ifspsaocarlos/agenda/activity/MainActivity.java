@@ -13,8 +13,6 @@ public class MainActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
 
-
-
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
