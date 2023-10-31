@@ -89,12 +89,11 @@ public class BaseActivity extends AppCompatActivity {
         Contato contact = adapter.getItem(info.position);
 
 
-        switch(item.getItemId()){
-            case R.id.delete_item:
-                cDAO.deleteContact(contact);
-                Toast.makeText(getApplicationContext(), "Removido com sucesso", Toast.LENGTH_SHORT).show();
-                buildListView();
-                return true;
+        if (item.getItemId() == R.id.delete_item) {
+            cDAO.deleteContact(contact);
+            Toast.makeText(getApplicationContext(), "Removido com sucesso", Toast.LENGTH_SHORT).show();
+            buildListView();
+            return true;
         }
         return super.onContextItemSelected(item);
     }

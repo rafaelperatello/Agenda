@@ -20,6 +20,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_NAME + " TEXT NOT NULL, " +
             KEY_FONE + " TEXT, " +
+            KEY_FONE2 + " TEXT, " +
+            KEY_BIRTHDAY   + " TEXT, " +
             KEY_EMAIL + " TEXT);";
 
     public SQLiteHelper(Context context) {

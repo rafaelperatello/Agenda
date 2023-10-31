@@ -72,20 +72,19 @@ public class DetalheActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.salvarContato:
-                salvar();
-                return true;
-            case R.id.delContato:
-                cDAO.deleteContact(c);
-                Toast.makeText(getApplicationContext(), "Removido com sucesso", Toast.LENGTH_SHORT).show();
-                Intent resultIntent = new Intent();
-                setResult(RESULT_OK,resultIntent);
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.salvarContato) {
+            salvar();
+            return true;
+        } else if (itemId == R.id.delContato) {
+            cDAO.deleteContact(c);
+            Toast.makeText(getApplicationContext(), "Removido com sucesso", Toast.LENGTH_SHORT).show();
+            Intent resultIntent = new Intent();
+            setResult(RESULT_OK, resultIntent);
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public void salvar()
