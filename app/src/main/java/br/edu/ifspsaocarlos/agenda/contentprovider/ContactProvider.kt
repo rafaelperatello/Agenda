@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import br.edu.ifspsaocarlos.agenda.data.Database
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
+import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_ID
 
 class ContactProvider : ContentProvider() {
 
@@ -35,7 +36,7 @@ class ContactProvider : ContentProvider() {
             CONTACTS_ID -> database.query(
                 ContactsTable.TABLE_NAME,
                 projection,
-                Contacts.KEY_ID + "=" + uri.lastPathSegment,
+                KEY_ID + "=" + uri.lastPathSegment,
                 null,
                 null,
                 null,
@@ -74,11 +75,10 @@ class ContactProvider : ContentProvider() {
 
         val count = when (uriType) {
             CONTACTS -> database.delete(ContactsTable.TABLE_NAME, selection, selectionArgs)
-            CONTACTS_ID -> database.delete(ContactsTable.TABLE_NAME, Contacts.KEY_ID + "=" + uri.pathSegments[1], null)
+            CONTACTS_ID -> database.delete(ContactsTable.TABLE_NAME, KEY_ID + "=" + uri.pathSegments[1], null)
             else -> throw IllegalArgumentException("Unknown URI")
 
         }
-        database.close()
         return count
     }
 
@@ -87,10 +87,9 @@ class ContactProvider : ContentProvider() {
 
         val count = when (uriType) {
             CONTACTS -> database.update(ContactsTable.TABLE_NAME, values, selection, selectionArgs)
-            CONTACTS_ID -> database.update(ContactsTable.TABLE_NAME, values, Contacts.KEY_ID + "=" + uri.pathSegments[1], null)
+            CONTACTS_ID -> database.update(ContactsTable.TABLE_NAME, values, KEY_ID + "=" + uri.pathSegments[1], null)
             else -> throw IllegalArgumentException("Unknown URI")
         }
-        database.close()
         return count
     }
 
@@ -102,8 +101,6 @@ class ContactProvider : ContentProvider() {
 
         const val CONTENT_TYPE: String = "vnd.android.cursor.dir/vnd.br.edu.ifspsaocarlos.agenda.contacts"
         const val CONTENT_ITEM_TYPE: String = "vnd.android.cursor.item/vnd.br.edu.ifspsaocarlos.agenda.contacts"
-
-        const val KEY_ID: String = "id"
     }
 
     companion object {

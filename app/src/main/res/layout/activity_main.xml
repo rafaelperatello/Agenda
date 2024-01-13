@@ -38,4 +38,16 @@
         android:src="@drawable/ic_action_new"
         app:elevation="10dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabProvider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="80dp"
+        android:focusable="true"
+        android:src="@drawable/ic_action_accept"
+        app:backgroundTint="@color/cardview_dark_background"
+        app:elevation="10dp" />
+
 </android.support.design.widget.CoordinatorLayout>
