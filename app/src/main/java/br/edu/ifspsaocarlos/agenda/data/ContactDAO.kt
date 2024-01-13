@@ -4,37 +4,34 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
 import br.edu.ifspsaocarlos.agenda.model.Contact
 
 val projection = arrayOf(
-    SQLiteHelper.KEY_ID,
-    SQLiteHelper.KEY_NAME,
-    SQLiteHelper.KEY_PHONE,
-    SQLiteHelper.KEY_PHONE2,
-    SQLiteHelper.KEY_BIRTHDAY,
-    SQLiteHelper.KEY_EMAIL
+    ContactsTable.KEY_ID,
+    ContactsTable.KEY_NAME,
+    ContactsTable.KEY_PHONE,
+    ContactsTable.KEY_PHONE2,
+    ContactsTable.KEY_BIRTHDAY,
+    ContactsTable.KEY_EMAIL
 )
 
 class ContactDAO(context: Context) {
 
-    private val dbHelper by lazy {
-        SQLiteHelper(context)
-    }
-
     private val database: SQLiteDatabase by lazy {
-        dbHelper.writableDatabase
+        Database.getDatabase(context)
     }
 
     fun searchAllContacts(): List<Contact> {
         val contacts: MutableList<Contact> = ArrayList()
         val cursor = database.query(
-            SQLiteHelper.DATABASE_TABLE,
+            ContactsTable.TABLE_NAME,
             projection,
             null,
             null,
             null,
             null,
-            SQLiteHelper.KEY_NAME
+            ContactsTable.KEY_NAME
         )
 
         if (cursor != null) {
@@ -52,13 +49,13 @@ class ContactDAO(context: Context) {
         val contacts: MutableList<Contact> = ArrayList()
 
         val cursor = database.query(
-            SQLiteHelper.DATABASE_TABLE,
+            ContactsTable.TABLE_NAME,
             projection,
-            "${SQLiteHelper.KEY_NAME} like ? or ${SQLiteHelper.KEY_PHONE} = ? or ${SQLiteHelper.KEY_EMAIL} like ?",
+            "${ContactsTable.KEY_NAME} like ? or ${ContactsTable.KEY_PHONE} = ? or ${ContactsTable.KEY_EMAIL} like ?",
             arrayOf("%$nome%", nome, "%$nome%"),
             null,
             null,
-            SQLiteHelper.KEY_NAME
+            ContactsTable.KEY_NAME
         )
 
         if (cursor != null) {
@@ -74,16 +71,16 @@ class ContactDAO(context: Context) {
 
     fun updateContact(contact: Contact) {
         val updateValues = contact.toContentValues()
-        database.update(SQLiteHelper.DATABASE_TABLE, updateValues, SQLiteHelper.KEY_ID + "=" + contact.id, null)
+        database.update(ContactsTable.TABLE_NAME, updateValues, ContactsTable.KEY_ID + "=" + contact.id, null)
     }
 
     fun createContact(contact: Contact) {
         val values = contact.toContentValues()
-        database.insert(SQLiteHelper.DATABASE_TABLE, null, values)
+        database.insert(ContactsTable.TABLE_NAME, null, values)
     }
 
     fun deleteContact(contact: Contact) {
-        database.delete(SQLiteHelper.DATABASE_TABLE, SQLiteHelper.KEY_ID + "= ?", arrayOf(contact.id.toString()))
+        database.delete(ContactsTable.TABLE_NAME, ContactsTable.KEY_ID + "= ?", arrayOf(contact.id.toString()))
     }
 }
 
@@ -100,10 +97,10 @@ private fun Cursor.getContact(): Contact {
 
 private fun Contact.toContentValues(): ContentValues {
     return ContentValues().apply {
-        put(SQLiteHelper.KEY_NAME, name)
-        put(SQLiteHelper.KEY_PHONE, phone)
-        put(SQLiteHelper.KEY_PHONE2, phone2)
-        put(SQLiteHelper.KEY_EMAIL, email)
-        put(SQLiteHelper.KEY_BIRTHDAY, birthday)
+        put(ContactsTable.KEY_NAME, name)
+        put(ContactsTable.KEY_PHONE, phone)
+        put(ContactsTable.KEY_PHONE2, phone2)
+        put(ContactsTable.KEY_EMAIL, email)
+        put(ContactsTable.KEY_BIRTHDAY, birthday)
     }
 }

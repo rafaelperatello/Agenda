@@ -49,7 +49,6 @@
 
         <activity android:name=".activity.BaseActivity" />
 
-
     </application>
 
 </manifest>

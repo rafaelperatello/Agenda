@@ -10,7 +10,7 @@ import android.widget.TextView
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.model.Contact
 
-class ContactArrayAdapter(activity: Activity, objects: List<Contact?>?) : ArrayAdapter<Contact?>(activity, R.layout.item_contact, objects!!) {
+class ContactArrayAdapter(activity: Activity, objects: List<Contact>) : ArrayAdapter<Contact?>(activity, R.layout.item_contact, objects) {
 
     private val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 

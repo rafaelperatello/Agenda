@@ -17,8 +17,8 @@ class DetailActivity : AppCompatActivity() {
 
     private var contact: Contact? = null
 
-    private val cDAO: ContactDAO by lazy {
-        ContactDAO(this@DetailActivity)
+    private val contactDAO: ContactDAO by lazy {
+        ContactDAO(this@DetailActivity.applicationContext)
     }
 
     private val nameText by lazy { findViewById<View>(R.id.editTextName) as EditText }
@@ -72,7 +72,7 @@ class DetailActivity : AppCompatActivity() {
             return true
         } else if (itemId == R.id.delContato) {
             val contact = contact ?: return true
-            cDAO.deleteContact(contact)
+            contactDAO.deleteContact(contact)
             Toast.makeText(applicationContext, "Removido com sucesso", Toast.LENGTH_SHORT).show()
             val resultIntent = Intent()
             setResult(RESULT_OK, resultIntent)
@@ -99,7 +99,7 @@ class DetailActivity : AppCompatActivity() {
                 email = email
             )
 
-            cDAO.createContact(newContact)
+            contactDAO.createContact(newContact)
             Toast.makeText(this, "Incluído com sucesso", Toast.LENGTH_SHORT).show()
         } else {
             newContact = newContact.copy(
@@ -110,7 +110,7 @@ class DetailActivity : AppCompatActivity() {
                 email = email
             )
 
-            cDAO.updateContact(newContact)
+            contactDAO.updateContact(newContact)
             Toast.makeText(this, "Alterado com sucesso", Toast.LENGTH_SHORT).show()
         }
 
