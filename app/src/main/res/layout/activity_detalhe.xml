@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,8 +8,8 @@
     tools:context="br.edu.ifspsaocarlos.agenda.activity.DetalheActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -22,7 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -33,68 +32,57 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nome">
-        </TextView>
+            android:text="Nome" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </EditText>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fone">
-        </TextView>
+            android:text="Fone" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </EditText>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textViewFone2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fone2">
-        </TextView>
+            android:text="Fone2" />
 
         <EditText
-            android:id="@+id/editTextFone2"
+            android:id="@+id/editTextPhone2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </EditText>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email" >
-        </TextView>
+            android:text="Email" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </EditText>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aniversário" >
-        </TextView>
+            android:text="Aniversário" />
 
         <EditText
             android:id="@+id/editTextBirthday"
-            android:inputType="date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </EditText>
-
+            android:layout_height="wrap_content"
+            android:inputType="date" />
 
     </LinearLayout>
 

@@ -20,14 +20,14 @@ import java.util.List;
 
 import br.edu.ifspsaocarlos.agenda.R;
 import br.edu.ifspsaocarlos.agenda.adapter.ContatoArrayAdapter;
-import br.edu.ifspsaocarlos.agenda.data.ContatoDAO;
-import br.edu.ifspsaocarlos.agenda.model.Contato;
+import br.edu.ifspsaocarlos.agenda.data.ContactDAO;
+import br.edu.ifspsaocarlos.agenda.model.Contact;
 
 public class BaseActivity extends AppCompatActivity {
 
     public    ListView            list;
     public    ContatoArrayAdapter adapter;
-    protected ContatoDAO          cDAO = new ContatoDAO(this);
+    protected ContactDAO          cDAO = new ContactDAO(this);
     protected SearchView          searchView;
 
     @Override
@@ -45,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View arg1, int arg2,
                                     long arg3) {
-                Contato contact = (Contato) adapterView.getAdapter().getItem(arg2);
+                Contact contact = (Contact) adapterView.getAdapter().getItem(arg2);
                 Intent inte = new Intent(getApplicationContext(), DetalheActivity.class);
                 inte.putExtra("contact", contact);
                 startActivityForResult(inte, 0);
@@ -85,7 +85,7 @@ public class BaseActivity extends AppCompatActivity {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         ContatoArrayAdapter adapter = (ContatoArrayAdapter) list.getAdapter();
-        Contato contact = adapter.getItem(info.position);
+        Contact contact = adapter.getItem(info.position);
 
 
         if (item.getItemId() == R.id.delete_item) {
@@ -99,14 +99,14 @@ public class BaseActivity extends AppCompatActivity {
 
 
     protected void buildListView() {
-        List<Contato> values = cDAO.buscaTodosContatos();
+        List<Contact> values = cDAO.searchAllContacts();
         adapter = new ContatoArrayAdapter(this, values);
         list.setAdapter(adapter);
 
     }
 
     protected void buildSearchListView(String query) {
-        List<Contato> values = cDAO.buscaContato(query);
+        List<Contact> values = cDAO.searchContact(query);
         adapter = new ContatoArrayAdapter(this, values);
         list.setAdapter(adapter);
     }
