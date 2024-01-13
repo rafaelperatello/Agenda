@@ -58,7 +58,7 @@ class DetailActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_detalhe, menu)
         if (!intent.hasExtra("contact")) {
-            val item = menu.findItem(R.id.delContato)
+            val item = menu.findItem(R.id.deleteContact)
             item.setVisible(false)
         }
 
@@ -67,10 +67,10 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val itemId = item.itemId
-        if (itemId == R.id.salvarContato) {
+        if (itemId == R.id.saveContact) {
             salvar()
             return true
-        } else if (itemId == R.id.delContato) {
+        } else if (itemId == R.id.deleteContact) {
             val contact = contact ?: return true
             contactDAO.deleteContact(contact)
             Toast.makeText(applicationContext, "Removido com sucesso", Toast.LENGTH_SHORT).show()

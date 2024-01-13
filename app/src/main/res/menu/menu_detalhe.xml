@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/salvarContato"
-        app:showAsAction="always"
+        android:id="@+id/saveContact"
         android:icon="@drawable/ic_action_accept"
         android:title="Salvar"
-        />
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/delContato"
-        app:showAsAction="always"
+        android:id="@+id/deleteContact"
         android:icon="@drawable/ic_action_discard"
         android:title="Excluir"
-        />
+        app:showAsAction="always" />
 
 </menu>
