@@ -7,23 +7,20 @@ class Database {
 
     companion object {
 
-        private var databaseSingleton: SQLiteDatabase? = null
+        const val DATABASE_NAME: String = "agenda.db"
+        const val DATABASE_VERSION: Int = 3
+
+        @Volatile
+        private var DB_INSTANCE: SQLiteDatabase? = null
 
         @Synchronized
         fun getDatabase(context: Context): SQLiteDatabase {
-            var database = databaseSingleton
-
-            return if (database == null) {
-                database = SQLiteHelper(context).writableDatabase
-                databaseSingleton = database
-                database
-            } else {
+            return DB_INSTANCE ?: run {
+                val database = SQLiteHelper(context).writableDatabase
+                DB_INSTANCE = database
                 database
             }
         }
-
-        const val DATABASE_NAME: String = "agenda.db"
-        const val DATABASE_VERSION: Int = 3
     }
 
     object ContactsTable {
