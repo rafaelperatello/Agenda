@@ -19,14 +19,14 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.edu.ifspsaocarlos.agenda.R;
-import br.edu.ifspsaocarlos.agenda.adapter.ContatoArrayAdapter;
+import br.edu.ifspsaocarlos.agenda.adapter.ContactArrayAdapter;
 import br.edu.ifspsaocarlos.agenda.data.ContactDAO;
 import br.edu.ifspsaocarlos.agenda.model.Contact;
 
 public class BaseActivity extends AppCompatActivity {
 
     public    ListView            list;
-    public    ContatoArrayAdapter adapter;
+    public    ContactArrayAdapter adapter;
     protected ContactDAO          cDAO = new ContactDAO(this);
     protected SearchView          searchView;
 
@@ -46,7 +46,7 @@ public class BaseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View arg1, int arg2,
                                     long arg3) {
                 Contact contact = (Contact) adapterView.getAdapter().getItem(arg2);
-                Intent inte = new Intent(getApplicationContext(), DetalheActivity.class);
+                Intent inte = new Intent(getApplicationContext(), DetailActivity.class);
                 inte.putExtra("contact", contact);
                 startActivityForResult(inte, 0);
 
@@ -84,7 +84,7 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        ContatoArrayAdapter adapter = (ContatoArrayAdapter) list.getAdapter();
+        ContactArrayAdapter adapter = (ContactArrayAdapter) list.getAdapter();
         Contact contact = adapter.getItem(info.position);
 
 
@@ -100,14 +100,14 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void buildListView() {
         List<Contact> values = cDAO.searchAllContacts();
-        adapter = new ContatoArrayAdapter(this, values);
+        adapter = new ContactArrayAdapter(this, values);
         list.setAdapter(adapter);
 
     }
 
     protected void buildSearchListView(String query) {
         List<Contact> values = cDAO.searchContact(query);
-        adapter = new ContatoArrayAdapter(this, values);
+        adapter = new ContactArrayAdapter(this, values);
         list.setAdapter(adapter);
     }
 

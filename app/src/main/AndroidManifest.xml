@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.edu.ifspsaocarlos.agenda" >
+    package="br.edu.ifspsaocarlos.agenda">
 
     <application
         android:allowBackup="true"
@@ -10,36 +10,35 @@
         android:theme="@style/AppTheme">
 
         <provider
-            android:name=".contentprovider.ContatoProvider"
+            android:name=".contentprovider.ContactProvider"
             android:authorities="br.edu.ifspsaocarlos.agenda.provider"
-            android:exported="true" >
-        </provider>
+            android:exported="true" />
 
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            </intent-filter>
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activity.SearchActivity" />
         </activity>
 
         <activity
-            android:name=".activity.DetalheActivity"
+            android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detalhe"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".activity.SearchActivity"
-                 android:launchMode="singleTop"
-                android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+        <activity
+            android:name=".activity.SearchActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -48,8 +47,7 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".activity.BaseActivity" >
-        </activity>
+        <activity android:name=".activity.BaseActivity" />
 
 
     </application>

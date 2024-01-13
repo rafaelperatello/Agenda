@@ -10,7 +10,7 @@ import android.widget.TextView
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.model.Contact
 
-class ContatoArrayAdapter(activity: Activity, objects: List<Contact?>?) : ArrayAdapter<Contact?>(activity, R.layout.contato_celula, objects!!) {
+class ContactArrayAdapter(activity: Activity, objects: List<Contact?>?) : ArrayAdapter<Contact?>(activity, R.layout.item_contact, objects!!) {
 
     private val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -19,7 +19,7 @@ class ContatoArrayAdapter(activity: Activity, objects: List<Contact?>?) : ArrayA
         val holder: ViewHolder
 
         if (view == null) {
-            view = inflater.inflate(R.layout.contato_celula, parent, false)
+            view = inflater.inflate(R.layout.item_contact, parent, false)
             holder = ViewHolder(
                 view.findViewById<View>(R.id.name) as TextView,
                 view.findViewById<View>(R.id.phone) as TextView

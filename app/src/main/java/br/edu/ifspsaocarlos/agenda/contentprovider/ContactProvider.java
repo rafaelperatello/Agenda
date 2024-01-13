@@ -14,9 +14,9 @@ import br.edu.ifspsaocarlos.agenda.data.SQLiteHelper;
 /**
  * Created by rafae on 14/12/2015.
  */
-public class ContatoProvider extends ContentProvider {
-    public static final int CONTATOS    = 1;
-    public static final int CONTATOS_ID = 2;
+public class ContactProvider extends ContentProvider {
+    public static final  int        CONTATOS    = 1;
+    public static final  int        CONTATOS_ID = 2;
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {

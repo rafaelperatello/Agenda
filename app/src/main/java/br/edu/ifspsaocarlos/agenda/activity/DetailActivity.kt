@@ -13,12 +13,12 @@ import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.data.ContactDAO
 import br.edu.ifspsaocarlos.agenda.model.Contact
 
-class DetalheActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
 
     private var contact: Contact? = null
 
     private val cDAO: ContactDAO by lazy {
-        ContactDAO(this@DetalheActivity)
+        ContactDAO(this@DetailActivity)
     }
 
     private val nameText by lazy { findViewById<View>(R.id.editTextName) as EditText }
@@ -29,7 +29,7 @@ class DetalheActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detalhe)
+        setContentView(R.layout.activity_detail)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
