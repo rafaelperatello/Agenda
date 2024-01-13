@@ -11,9 +11,9 @@ import java.util.List;
 import br.edu.ifspsaocarlos.agenda.model.Contato;
 
 public class ContatoDAO {
-    private Context context;
+    private Context        context;
     private SQLiteDatabase database;
-    private SQLiteHelper dbHelper;
+    private SQLiteHelper   dbHelper;
 
     public ContatoDAO(Context context) {
         this.context = context;
@@ -31,7 +31,7 @@ public class ContatoDAO {
                         SQLiteHelper.KEY_FONE,
                         SQLiteHelper.KEY_EMAIL,
                         SQLiteHelper.KEY_FONE2,
-                        SQLiteHelper.KEY_BIRTHDAY},
+                        SQLiteHelper.KEY_BIRTHDAY },
                 null,
                 null,
                 null,
@@ -71,9 +71,9 @@ public class ContatoDAO {
                         SQLiteHelper.KEY_FONE,
                         SQLiteHelper.KEY_EMAIL,
                         SQLiteHelper.KEY_FONE2,
-                        SQLiteHelper.KEY_BIRTHDAY},
+                        SQLiteHelper.KEY_BIRTHDAY },
                 SQLiteHelper.KEY_NAME + " like ? or " + SQLiteHelper.KEY_FONE + " = ? or " + SQLiteHelper.KEY_EMAIL + " like ?",
-                new String[]{"%" + nome + "%", nome, "%" + nome + "%"},
+                new String[]{ "%" + nome + "%", nome, "%" + nome + "%" },
                 null,
                 null,
                 SQLiteHelper.KEY_NAME);

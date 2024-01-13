@@ -1,29 +1,25 @@
 package br.edu.ifspsaocarlos.agenda.adapter;
 
 
-
-import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ArrayAdapter;
-
 import android.widget.TextView;
+
+import java.util.List;
 
 import br.edu.ifspsaocarlos.agenda.R;
 import br.edu.ifspsaocarlos.agenda.model.Contato;
 
-public class ContatoArrayAdapter extends ArrayAdapter <Contato>  {
+public class ContatoArrayAdapter extends ArrayAdapter<Contato> {
     private LayoutInflater inflater;
-
 
 
     public ContatoArrayAdapter(Activity activity, List<Contato> objects) {
         super(activity, R.layout.contato_celula, objects);
-
 
 
         this.inflater = (LayoutInflater) activity
@@ -53,7 +49,6 @@ public class ContatoArrayAdapter extends ArrayAdapter <Contato>  {
         public TextView nome;
         public TextView telefone;
     }
-
 
 
 }

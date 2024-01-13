@@ -10,24 +10,22 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import br.edu.ifspsaocarlos.agenda.data.SQLiteHelper;
-import br.edu.ifspsaocarlos.agenda.model.Contato;
 
 /**
  * Created by rafae on 14/12/2015.
  */
 public class ContatoProvider extends ContentProvider {
-    private SQLiteDatabase database;
-    private SQLiteHelper dbHelper;
-
-    public static final int CONTATOS = 1;
+    public static final int CONTATOS    = 1;
     public static final int CONTATOS_ID = 2;
-
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sURIMatcher.addURI(Contatos.AUTHORITY, "contatos", CONTATOS);
         sURIMatcher.addURI(Contatos.AUTHORITY, "contatos/#", CONTATOS_ID);
     }
+
+    private SQLiteDatabase database;
+    private SQLiteHelper   dbHelper;
 
     @Override
     public boolean onCreate() {
@@ -43,10 +41,9 @@ public class ContatoProvider extends ContentProvider {
 
         Cursor cursor;
 
-        switch(sURIMatcher.match(uri))
-        {
+        switch (sURIMatcher.match(uri)) {
             case CONTATOS:
-                cursor = database.query(SQLiteHelper.DATABASE_TABLE, projection, selection, selectionArgs, null,null, sortOrder);
+                cursor = database.query(SQLiteHelper.DATABASE_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case CONTATOS_ID:
@@ -64,8 +61,7 @@ public class ContatoProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
 
-        switch(sURIMatcher.match(uri))
-        {
+        switch (sURIMatcher.match(uri)) {
             case CONTATOS:
                 return Contatos.CONTENT_TYPE;
 
@@ -86,10 +82,9 @@ public class ContatoProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         long id;
 
-        switch(uriType)
-        {
+        switch (uriType) {
             case CONTATOS:
-                id=database.insert(SQLiteHelper.DATABASE_TABLE, null, values);
+                id = database.insert(SQLiteHelper.DATABASE_TABLE, null, values);
                 break;
 
             default:
@@ -109,14 +104,13 @@ public class ContatoProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         int count;
 
-        switch(uriType)
-        {
+        switch (uriType) {
             case CONTATOS:
-                count=database.delete(SQLiteHelper.DATABASE_TABLE, selection, selectionArgs);
+                count = database.delete(SQLiteHelper.DATABASE_TABLE, selection, selectionArgs);
                 break;
 
             case CONTATOS_ID:
-                count=database.delete(SQLiteHelper.DATABASE_TABLE, Contatos.KEY_ID + "=" + uri.getPathSegments().get(1), null);
+                count = database.delete(SQLiteHelper.DATABASE_TABLE, Contatos.KEY_ID + "=" + uri.getPathSegments().get(1), null);
                 break;
 
             default:
@@ -134,14 +128,13 @@ public class ContatoProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         int count;
 
-        switch(uriType)
-        {
+        switch (uriType) {
             case CONTATOS:
-                count=database.update(SQLiteHelper.DATABASE_TABLE, values, selection, selectionArgs);
+                count = database.update(SQLiteHelper.DATABASE_TABLE, values, selection, selectionArgs);
                 break;
 
             case CONTATOS_ID:
-                count=database.update(SQLiteHelper.DATABASE_TABLE, values, Contatos.KEY_ID + "=" + uri.getPathSegments().get(1), null);
+                count = database.update(SQLiteHelper.DATABASE_TABLE, values, Contatos.KEY_ID + "=" + uri.getPathSegments().get(1), null);
                 break;
 
             default:
@@ -156,13 +149,13 @@ public class ContatoProvider extends ContentProvider {
         public static final String AUTHORITY = "br.edu.ifspsaocarlos.agenda.provider";
 
 
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY  + "/contatos");
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/contatos");
 
-        public static final String CONTENT_TYPE= "vnd.android.cursor.dir/vnd.br.edu.ifspsaocarlos.agenda.contatos";
-        public static final String CONTENT_ITEM_TYPE= "vnd.android.cursor.item/vnd.br.edu.ifspsaocarlos.agenda.contatos";
+        public static final String CONTENT_TYPE      = "vnd.android.cursor.dir/vnd.br.edu.ifspsaocarlos.agenda.contatos";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.br.edu.ifspsaocarlos.agenda.contatos";
 
-        public static final String KEY_ID = "id";
-        public static final String KEY_NOME = "nome";
+        public static final String KEY_ID       = "id";
+        public static final String KEY_NOME     = "nome";
         public static final String KEY_TELEFONE = "fone";
     }
 }

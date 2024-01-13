@@ -3,8 +3,8 @@ package br.edu.ifspsaocarlos.agenda.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -25,10 +25,10 @@ import br.edu.ifspsaocarlos.agenda.model.Contato;
 
 public class BaseActivity extends AppCompatActivity {
 
-    protected ContatoDAO cDAO=new ContatoDAO(this);
-    public ListView list;
-    public ContatoArrayAdapter adapter;
-    protected SearchView searchView;
+    public    ListView            list;
+    public    ContatoArrayAdapter adapter;
+    protected ContatoDAO          cDAO = new ContatoDAO(this);
+    protected SearchView          searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +59,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -85,7 +84,7 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        ContatoArrayAdapter adapter = (ContatoArrayAdapter)list.getAdapter();
+        ContatoArrayAdapter adapter = (ContatoArrayAdapter) list.getAdapter();
         Contato contact = adapter.getItem(info.position);
 
 
@@ -108,7 +107,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void buildSearchListView(String query) {
         List<Contato> values = cDAO.buscaContato(query);
-        adapter= new ContatoArrayAdapter(this, values);
+        adapter = new ContatoArrayAdapter(this, values);
         list.setAdapter(adapter);
     }
 

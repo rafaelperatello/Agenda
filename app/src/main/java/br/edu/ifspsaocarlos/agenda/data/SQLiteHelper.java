@@ -6,22 +6,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "agenda.db";
-    public static final String DATABASE_TABLE = "contatos";
-    public static final String KEY_ID = "id";
-    public static final String KEY_NAME = "nome";
-    public static final String KEY_FONE = "fone";
-    public static final String KEY_FONE2 = "fone2";
-    public static final String KEY_BIRTHDAY = "aniversario";
-    public static final String KEY_EMAIL = "email";
-    public static final int DATABASE_VERSION = 3;
+    public static final String DATABASE_NAME    = "agenda.db";
+    public static final String DATABASE_TABLE   = "contatos";
+    public static final String KEY_ID           = "id";
+    public static final String KEY_NAME         = "nome";
+    public static final String KEY_FONE         = "fone";
+    public static final String KEY_FONE2        = "fone2";
+    public static final String KEY_BIRTHDAY     = "aniversario";
+    public static final String KEY_EMAIL        = "email";
+    public static final int    DATABASE_VERSION = 3;
 
     public static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_TABLE + " (" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_NAME + " TEXT NOT NULL, " +
             KEY_FONE + " TEXT, " +
             KEY_FONE2 + " TEXT, " +
-            KEY_BIRTHDAY   + " TEXT, " +
+            KEY_BIRTHDAY + " TEXT, " +
             KEY_EMAIL + " TEXT);";
 
     public SQLiteHelper(Context context) {
@@ -35,7 +35,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        switch(oldVersion){
+        switch (oldVersion) {
             case 1:
                 Log.d("Agenda", "Update da versao 1 para 2");
 

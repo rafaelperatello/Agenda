@@ -3,13 +3,13 @@ package br.edu.ifspsaocarlos.agenda.model;
 import java.io.Serializable;
 
 public class Contato implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private long id;
-    private String nome;
-    private String fone;
-    private String fone2;
-    private String birthday;
-    private String email;
+    private static final long   serialVersionUID = 1L;
+    private              long   id;
+    private              String nome;
+    private              String fone;
+    private              String fone2;
+    private              String birthday;
+    private              String email;
 
     public Contato() {
     }

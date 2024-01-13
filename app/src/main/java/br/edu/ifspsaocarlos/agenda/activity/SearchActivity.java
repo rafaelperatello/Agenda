@@ -2,8 +2,8 @@ package br.edu.ifspsaocarlos.agenda.activity;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 
 import br.edu.ifspsaocarlos.agenda.R;
 
