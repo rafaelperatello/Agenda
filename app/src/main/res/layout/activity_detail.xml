@@ -37,29 +37,38 @@
         <EditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"
+            android:maxLength="100"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fone" />
+            android:text="Telefone 1" />
 
         <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="30"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/textViewFone2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fone2" />
+            android:text="Telefone 2" />
 
         <EditText
             android:id="@+id/editTextPhone2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text|phone"
+            android:maxLength="30"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/textView3"
@@ -70,19 +79,24 @@
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aniversário" />
+            android:text="Data de nascimento" />
 
         <EditText
             android:id="@+id/editTextBirthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date" />
+            android:inputType="date"
+            android:maxLength="30"
+            android:maxLines="1" />
 
     </LinearLayout>
 
