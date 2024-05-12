@@ -22,7 +22,7 @@ import br.edu.ifspsaocarlos.agenda.model.Contact
 
 open class BaseActivity : AppCompatActivity() {
 
-    private val list: ListView by lazy { findViewById<View>(R.id.listView) as ListView }
+    private val list by lazy { findViewById<ListView>(R.id.listView) }
     private var adapter: ContactArrayAdapter? = null
 
     private val contactDAO: ContactDAO by lazy { ContactDAO(this@BaseActivity.applicationContext) }
@@ -32,7 +32,7 @@ open class BaseActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         list.onItemClickListener = OnItemClickListener { adapterView, _, arg2, _ ->

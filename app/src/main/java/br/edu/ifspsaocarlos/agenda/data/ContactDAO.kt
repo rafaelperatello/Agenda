@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
 import br.edu.ifspsaocarlos.agenda.model.Contact
 
-val projection = arrayOf(
+private val projection = arrayOf(
     ContactsTable.KEY_ID,
     ContactsTable.KEY_NAME,
     ContactsTable.KEY_PHONE,
@@ -71,16 +71,29 @@ class ContactDAO(context: Context) {
 
     fun updateContact(contact: Contact) {
         val updateValues = contact.toContentValues()
-        database.update(ContactsTable.TABLE_NAME, updateValues, ContactsTable.KEY_ID + "=" + contact.id, null)
+        database.update(
+            ContactsTable.TABLE_NAME,
+            updateValues,
+            "${ContactsTable.KEY_ID} = ${contact.id}",
+            null
+        )
     }
 
     fun createContact(contact: Contact) {
         val values = contact.toContentValues()
-        database.insert(ContactsTable.TABLE_NAME, null, values)
+        database.insert(
+            ContactsTable.TABLE_NAME,
+            null,
+            values
+        )
     }
 
     fun deleteContact(contact: Contact) {
-        database.delete(ContactsTable.TABLE_NAME, ContactsTable.KEY_ID + "= ?", arrayOf(contact.id.toString()))
+        database.delete(
+            ContactsTable.TABLE_NAME,
+            "${ContactsTable.KEY_ID} = ?",
+            arrayOf(contact.id.toString())
+        )
     }
 }
 

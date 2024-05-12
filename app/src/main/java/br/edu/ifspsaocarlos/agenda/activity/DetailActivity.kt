@@ -21,11 +21,11 @@ class DetailActivity : AppCompatActivity() {
         ContactDAO(this@DetailActivity.applicationContext)
     }
 
-    private val nameText by lazy { findViewById<View>(R.id.editTextName) as EditText }
-    private val phoneText by lazy { findViewById<View>(R.id.editTextPhone) as EditText }
-    private val phone2Text by lazy { findViewById<View>(R.id.editTextPhone2) as EditText }
-    private val emailText by lazy { findViewById<View>(R.id.editTextEmail) as EditText }
-    private val birthdayText by lazy { findViewById<View>(R.id.editTextBirthday) as EditText }
+    private val nameText by lazy { findViewById<EditText>(R.id.editTextName) }
+    private val phoneText by lazy { findViewById<EditText>(R.id.editTextPhone) }
+    private val phone2Text by lazy { findViewById<EditText>(R.id.editTextPhone2) }
+    private val emailText by lazy { findViewById<EditText>(R.id.editTextEmail) }
+    private val birthdayText by lazy { findViewById<EditText>(R.id.editTextBirthday) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

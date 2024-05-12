@@ -21,7 +21,13 @@ class ContactProvider : ContentProvider() {
         return true
     }
 
-    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
         val cursor = when (sURIMatcher.match(uri)) {
             CONTACTS -> database.query(
                 ContactsTable.TABLE_NAME,
@@ -36,7 +42,7 @@ class ContactProvider : ContentProvider() {
             CONTACTS_ID -> database.query(
                 ContactsTable.TABLE_NAME,
                 projection,
-                KEY_ID + "=" + uri.lastPathSegment,
+                "$KEY_ID = ${uri.lastPathSegment}",
                 null,
                 null,
                 null,
@@ -58,36 +64,75 @@ class ContactProvider : ContentProvider() {
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri {
+    override fun insert(
+        uri: Uri,
+        values: ContentValues?
+    ): Uri {
         val uriType = sURIMatcher.match(uri)
         val id: Long
 
         when (uriType) {
-            CONTACTS -> id = database.insert(ContactsTable.TABLE_NAME, null, values)
+            CONTACTS -> id = database.insert(
+                ContactsTable.TABLE_NAME,
+                null,
+                values
+            )
+
             else -> throw IllegalArgumentException("Unknown URI")
 
         }
         return ContentUris.withAppendedId(uri, id)
     }
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
         val uriType = sURIMatcher.match(uri)
 
         val count = when (uriType) {
-            CONTACTS -> database.delete(ContactsTable.TABLE_NAME, selection, selectionArgs)
-            CONTACTS_ID -> database.delete(ContactsTable.TABLE_NAME, KEY_ID + "=" + uri.pathSegments[1], null)
+            CONTACTS -> database.delete(
+                ContactsTable.TABLE_NAME,
+                selection,
+                selectionArgs
+            )
+
+            CONTACTS_ID -> database.delete(
+                ContactsTable.TABLE_NAME,
+                "$KEY_ID = ${uri.pathSegments[1]}",
+                null
+            )
+
             else -> throw IllegalArgumentException("Unknown URI")
 
         }
         return count
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
         val uriType = sURIMatcher.match(uri)
 
         val count = when (uriType) {
-            CONTACTS -> database.update(ContactsTable.TABLE_NAME, values, selection, selectionArgs)
-            CONTACTS_ID -> database.update(ContactsTable.TABLE_NAME, values, KEY_ID + "=" + uri.pathSegments[1], null)
+            CONTACTS -> database.update(
+                ContactsTable.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+            )
+
+            CONTACTS_ID -> database.update(
+                ContactsTable.TABLE_NAME,
+                values,
+                "$KEY_ID = ${uri.pathSegments[1]}",
+                null
+            )
+
             else -> throw IllegalArgumentException("Unknown URI")
         }
         return count
@@ -111,8 +156,10 @@ class ContactProvider : ContentProvider() {
         private val sURIMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
         init {
-            sURIMatcher.addURI(Contacts.AUTHORITY, "contacts", CONTACTS)
-            sURIMatcher.addURI(Contacts.AUTHORITY, "contacts/#", CONTACTS_ID)
+            with(sURIMatcher) {
+                addURI(Contacts.AUTHORITY, "contacts", CONTACTS)
+                addURI(Contacts.AUTHORITY, "contacts/#", CONTACTS_ID)
+            }
         }
     }
 }
