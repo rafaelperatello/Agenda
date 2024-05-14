@@ -3,9 +3,6 @@ package br.edu.ifspsaocarlos.agenda.activity
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
 import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
 import android.view.Menu
@@ -15,6 +12,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.adapter.ContactArrayAdapter
 import br.edu.ifspsaocarlos.agenda.data.ContactDAO

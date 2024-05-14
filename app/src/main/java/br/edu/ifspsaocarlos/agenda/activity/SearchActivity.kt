@@ -3,8 +3,8 @@ package br.edu.ifspsaocarlos.agenda.activity
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import br.edu.ifspsaocarlos.agenda.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class SearchActivity : BaseActivity() {
 
@@ -19,6 +19,7 @@ class SearchActivity : BaseActivity() {
     }
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         setIntent(intent)
         handleIntent(intent)
     }

@@ -2,8 +2,8 @@ package br.edu.ifspsaocarlos.agenda.activity
 
 import android.content.ContentValues
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.contentprovider.ContactProvider.Contacts.CONTENT_URI
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_BIRTHDAY
