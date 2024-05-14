@@ -6,6 +6,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
 import br.edu.ifspsaocarlos.agenda.model.Contact
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private val projection = arrayOf(
     ContactsTable.KEY_ID,
@@ -22,6 +24,7 @@ class ContactDAO(context: Context) {
         Database.getDatabase(context)
     }
 
+    @Deprecated("Use suspend functions instead")
     fun searchAllContacts(): List<Contact> {
         val contacts: MutableList<Contact> = ArrayList()
         val cursor = database.query(
@@ -45,6 +48,7 @@ class ContactDAO(context: Context) {
         return contacts
     }
 
+    @Deprecated("Use suspend functions instead")
     fun searchContact(nome: String): List<Contact> {
         val contacts: MutableList<Contact> = ArrayList()
 
@@ -69,6 +73,7 @@ class ContactDAO(context: Context) {
         return contacts
     }
 
+    @Deprecated("Use suspend functions instead")
     fun updateContact(contact: Contact) {
         val updateValues = contact.toContentValues()
         database.update(
@@ -79,6 +84,7 @@ class ContactDAO(context: Context) {
         )
     }
 
+    @Deprecated("Use suspend functions instead")
     fun createContact(contact: Contact) {
         val values = contact.toContentValues()
         database.insert(
@@ -88,12 +94,44 @@ class ContactDAO(context: Context) {
         )
     }
 
+    @Deprecated("Use suspend functions instead")
     fun deleteContact(contact: Contact) {
         database.delete(
             ContactsTable.TABLE_NAME,
             "${ContactsTable.KEY_ID} = ?",
             arrayOf(contact.id.toString())
         )
+    }
+
+    // create suspend functions for the DAO
+    suspend fun searchAllContactsSuspend(): List<Contact> {
+        return withContext(Dispatchers.IO) {
+            searchAllContacts()
+        }
+    }
+
+    suspend fun searchContactSuspend(nome: String): List<Contact> {
+        return withContext(Dispatchers.IO) {
+            searchContact(nome)
+        }
+    }
+
+    suspend fun updateContactSuspend(contact: Contact) {
+        withContext(Dispatchers.IO) {
+            updateContact(contact)
+        }
+    }
+
+    suspend fun createContactSuspend(contact: Contact) {
+        withContext(Dispatchers.IO) {
+            createContact(contact)
+        }
+    }
+
+    suspend fun deleteContactSuspend(contact: Contact) {
+        withContext(Dispatchers.IO) {
+            deleteContact(contact)
+        }
     }
 }
 

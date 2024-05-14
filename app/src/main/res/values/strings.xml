@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">Agenda</string>
-    <string name="search_hint">Buscar contato</string>
+    <string name="title_activity_main_compose">MainActivityCompose</string>
+
     <string name="title_activity_detalhe">Novo contato</string>
+
+    <string name="search_hint">Search contact</string>
+    <string name="search_empty_results">No results found</string>
+
+    <string name="remove_contact">Remove contact</string>
+    <string name="remove_contact_confirmation">Do you want to remove contact %1$s</string>
+
+    <string name="empty_name">Empty name</string>
+    <string name="empty_phone">Empty phone</string>
+
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
