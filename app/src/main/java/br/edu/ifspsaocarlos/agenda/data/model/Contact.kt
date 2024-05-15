@@ -1,7 +1,9 @@
 package br.edu.ifspsaocarlos.agenda.data.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Contact(
     val id: Long = 0,
     val name: String? = null,
@@ -9,4 +11,4 @@ data class Contact(
     val phone2: String? = null,
     val birthday: String? = null,
     val email: String? = null
-) : Serializable
+) : Parcelable
