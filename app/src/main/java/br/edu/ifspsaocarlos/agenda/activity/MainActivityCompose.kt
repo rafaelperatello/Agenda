@@ -151,7 +151,7 @@ class MainActivityCompose : ComponentActivity() {
                     if (it.isBlank()) {
                         contactSearchResultStateFlow.value = emptyList()
                     } else {
-                        contactSearchResultStateFlow.value = contactDAO.searchContactSuspend(it)
+                        contactSearchResultStateFlow.value = contactDAO.searchContact(it)
                     }
                 }
             }
@@ -168,14 +168,14 @@ class MainActivityCompose : ComponentActivity() {
 
     private fun saveNewContact(contact: Contact) {
         lifecycleScope.launch {
-            contactDAO.createContactSuspend(contact)
+            contactDAO.createContact(contact)
             refreshContactList()
         }
     }
 
     private fun updateContact(contact: Contact) {
         lifecycleScope.launch {
-            contactDAO.updateContactSuspend(contact)
+            contactDAO.updateContact(contact)
             refreshContactList()
             maybeRefreshSearch()
         }
@@ -183,14 +183,14 @@ class MainActivityCompose : ComponentActivity() {
 
     private fun removeContact(contact: Contact) {
         lifecycleScope.launch {
-            contactDAO.deleteContactSuspend(contact)
+            contactDAO.deleteContact(contact)
             refreshContactList()
             maybeRefreshSearch()
         }
     }
 
     private suspend fun refreshContactList() {
-        contactList.value = contactDAO.searchAllContactsSuspend()
+        contactList.value = contactDAO.searchAllContacts()
     }
 
     private fun maybeRefreshSearch() {

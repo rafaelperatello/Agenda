@@ -24,113 +24,87 @@ class ContactDAO(context: Context) {
         Database.getDatabase(context)
     }
 
-    @Deprecated("Use suspend functions instead")
-    fun searchAllContacts(): List<Contact> {
-        val contacts: MutableList<Contact> = ArrayList()
-        val cursor = database.query(
-            ContactsTable.TABLE_NAME,
-            projection,
-            null,
-            null,
-            null,
-            null,
-            ContactsTable.KEY_NAME
-        )
-
-        if (cursor != null) {
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                contacts.add(cursor.getContact())
-                cursor.moveToNext()
-            }
-            cursor.close()
-        }
-        return contacts
-    }
-
-    @Deprecated("Use suspend functions instead")
-    fun searchContact(nome: String): List<Contact> {
-        val contacts: MutableList<Contact> = ArrayList()
-
-        val cursor = database.query(
-            ContactsTable.TABLE_NAME,
-            projection,
-            "${ContactsTable.KEY_NAME} like ? or ${ContactsTable.KEY_PHONE} = ? or ${ContactsTable.KEY_EMAIL} like ?",
-            arrayOf("%$nome%", nome, "%$nome%"),
-            null,
-            null,
-            ContactsTable.KEY_NAME
-        )
-
-        if (cursor != null) {
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                contacts.add(cursor.getContact())
-                cursor.moveToNext()
-            }
-            cursor.close()
-        }
-        return contacts
-    }
-
-    @Deprecated("Use suspend functions instead")
-    fun updateContact(contact: Contact) {
-        val updateValues = contact.toContentValues()
-        database.update(
-            ContactsTable.TABLE_NAME,
-            updateValues,
-            "${ContactsTable.KEY_ID} = ${contact.id}",
-            null
-        )
-    }
-
-    @Deprecated("Use suspend functions instead")
-    fun createContact(contact: Contact) {
-        val values = contact.toContentValues()
-        database.insert(
-            ContactsTable.TABLE_NAME,
-            null,
-            values
-        )
-    }
-
-    @Deprecated("Use suspend functions instead")
-    fun deleteContact(contact: Contact) {
-        database.delete(
-            ContactsTable.TABLE_NAME,
-            "${ContactsTable.KEY_ID} = ?",
-            arrayOf(contact.id.toString())
-        )
-    }
-
-    // create suspend functions for the DAO
-    suspend fun searchAllContactsSuspend(): List<Contact> {
+    suspend fun searchAllContacts(): List<Contact> {
         return withContext(Dispatchers.IO) {
-            searchAllContacts()
+            val contacts: MutableList<Contact> = ArrayList()
+            val cursor = database.query(
+                ContactsTable.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                ContactsTable.KEY_NAME
+            )
+
+            if (cursor != null) {
+                cursor.moveToFirst()
+                while (!cursor.isAfterLast) {
+                    contacts.add(cursor.getContact())
+                    cursor.moveToNext()
+                }
+                cursor.close()
+            }
+            contacts
         }
     }
 
-    suspend fun searchContactSuspend(nome: String): List<Contact> {
+    suspend fun searchContact(nome: String): List<Contact> {
         return withContext(Dispatchers.IO) {
-            searchContact(nome)
+            val contacts: MutableList<Contact> = ArrayList()
+
+            val cursor = database.query(
+                ContactsTable.TABLE_NAME,
+                projection,
+                "${ContactsTable.KEY_NAME} like ? or ${ContactsTable.KEY_PHONE} = ? or ${ContactsTable.KEY_EMAIL} like ?",
+                arrayOf("%$nome%", nome, "%$nome%"),
+                null,
+                null,
+                ContactsTable.KEY_NAME
+            )
+
+            if (cursor != null) {
+                cursor.moveToFirst()
+                while (!cursor.isAfterLast) {
+                    contacts.add(cursor.getContact())
+                    cursor.moveToNext()
+                }
+                cursor.close()
+            }
+            contacts
         }
     }
 
-    suspend fun updateContactSuspend(contact: Contact) {
+    suspend fun updateContact(contact: Contact) {
         withContext(Dispatchers.IO) {
-            updateContact(contact)
+            val updateValues = contact.toContentValues()
+            database.update(
+                ContactsTable.TABLE_NAME,
+                updateValues,
+                "${ContactsTable.KEY_ID} = ${contact.id}",
+                null
+            )
         }
     }
 
-    suspend fun createContactSuspend(contact: Contact) {
+    suspend fun createContact(contact: Contact) {
         withContext(Dispatchers.IO) {
-            createContact(contact)
+            val values = contact.toContentValues()
+            database.insert(
+                ContactsTable.TABLE_NAME,
+                null,
+                values
+            )
         }
     }
 
-    suspend fun deleteContactSuspend(contact: Contact) {
+    suspend fun deleteContact(contact: Contact) {
         withContext(Dispatchers.IO) {
-            deleteContact(contact)
+            database.delete(
+                ContactsTable.TABLE_NAME,
+                "${ContactsTable.KEY_ID} = ?",
+                arrayOf(contact.id.toString())
+            )
         }
     }
 }
