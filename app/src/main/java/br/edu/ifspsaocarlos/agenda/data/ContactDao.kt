@@ -44,7 +44,7 @@ class ContactDao(private val database: SQLiteDatabase) {
         }
     }
 
-    suspend fun searchContact(nome: String): List<Contact> {
+    suspend fun searchContacts(nome: String): List<Contact> {
         return withContext(Dispatchers.IO) {
             val contacts: MutableList<Contact> = ArrayList()
 

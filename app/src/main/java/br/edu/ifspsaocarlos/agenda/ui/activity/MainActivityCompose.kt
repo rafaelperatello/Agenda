@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -49,22 +50,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import br.edu.ifspsaocarlos.agenda.R
-import br.edu.ifspsaocarlos.agenda.ui.activity.compose.ContactFormBottomSheet
-import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.data.ContactDao
 import br.edu.ifspsaocarlos.agenda.data.model.Contact
+import br.edu.ifspsaocarlos.agenda.ui.activity.compose.ContactFormBottomSheet
+import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -72,16 +67,7 @@ class MainActivityCompose : ComponentActivity() {
 
     @Inject lateinit var contactDAO: ContactDao
 
-    private val contactList = mutableStateOf<List<Contact>>(emptyList())
-
-    private val contactSearchQueryStateFlow = MutableSharedFlow<String>(
-        replay = 1,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    private val contactSearchResultStateFlow = MutableStateFlow(emptyList<Contact>())
-
-    private val showSearchBarStateFlow = MutableStateFlow(false)
+    private val mainActivityViewModel by viewModels<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,9 +86,9 @@ class MainActivityCompose : ComponentActivity() {
                         },
                         onSaveContactClicked = {
                             if (contact == null) {
-                                saveNewContact(it)
+                                mainActivityViewModel.saveNewContact(it)
                             } else {
-                                updateContact(it)
+                                mainActivityViewModel.updateContact(it)
                             }
                             showSheet = false
                             contact = null
@@ -111,10 +97,13 @@ class MainActivityCompose : ComponentActivity() {
                 }
 
                 MainScaffold(
-                    contactList = contactList.value,
-                    contactSearchQuerySharedFlow = contactSearchQueryStateFlow,
-                    contactSearchResultStateFlow = contactSearchResultStateFlow,
-                    showSearchBarStateFlow = showSearchBarStateFlow,
+                    contactListStateFlow = mainActivityViewModel.contactListStateFlow,
+                    searchQuerySharedFlow = mainActivityViewModel.searchQueryStateFlow,
+                    searchResultStateFlow = mainActivityViewModel.searchResultListStateFlow,
+                    showSearchBarStateFlow = mainActivityViewModel.showSearchBarStateFlow,
+                    onQueryChanged = mainActivityViewModel::onSearchQueryChanged,
+                    onSearchClicked = mainActivityViewModel::onSearchClicked,
+                    onSearchClosed = mainActivityViewModel::onSearchClosed,
                     onCheckClicked = {
                         showContentProviderActivity()
                     },
@@ -127,79 +116,10 @@ class MainActivityCompose : ComponentActivity() {
                         showSheet = true
                     },
                     onRemoveContactConfirmed = {
-                        removeContact(it)
+                        mainActivityViewModel.removeContact(it)
                     }
                 )
             }
-        }
-
-        refreshDataWhenReady()
-        listenSearchTokenChanges()
-        listenSearchBarVisibilityChanges()
-    }
-
-    private fun listenSearchBarVisibilityChanges() {
-        lifecycleScope.launch {
-            showSearchBarStateFlow.collectLatest {
-                if (!it) {
-                    contactSearchQueryStateFlow.tryEmit("")
-                }
-            }
-        }
-    }
-
-    private fun listenSearchTokenChanges() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                contactSearchQueryStateFlow.collectLatest {
-                    if (it.isBlank()) {
-                        contactSearchResultStateFlow.value = emptyList()
-                    } else {
-                        contactSearchResultStateFlow.value = contactDAO.searchContact(it)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun refreshDataWhenReady() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                refreshContactList()
-            }
-        }
-    }
-
-    private fun saveNewContact(contact: Contact) {
-        lifecycleScope.launch {
-            contactDAO.createContact(contact)
-            refreshContactList()
-        }
-    }
-
-    private fun updateContact(contact: Contact) {
-        lifecycleScope.launch {
-            contactDAO.updateContact(contact)
-            refreshContactList()
-            maybeRefreshSearch()
-        }
-    }
-
-    private fun removeContact(contact: Contact) {
-        lifecycleScope.launch {
-            contactDAO.deleteContact(contact)
-            refreshContactList()
-            maybeRefreshSearch()
-        }
-    }
-
-    private suspend fun refreshContactList() {
-        contactList.value = contactDAO.searchAllContacts()
-    }
-
-    private fun maybeRefreshSearch() {
-        if (showSearchBarStateFlow.value) {
-            contactSearchQueryStateFlow.tryEmit(contactSearchQueryStateFlow.replayCache.firstOrNull() ?: "")
         }
     }
 
@@ -212,11 +132,14 @@ class MainActivityCompose : ComponentActivity() {
 
 @Composable
 fun MainScaffold(
-    contactList: List<Contact>,
-    contactSearchQuerySharedFlow: MutableSharedFlow<String>,
-    contactSearchResultStateFlow: StateFlow<List<Contact>>,
-    showSearchBarStateFlow: MutableStateFlow<Boolean>,
-    onCheckClicked: () -> Unit,
+    contactListStateFlow: StateFlow<List<Contact>>,
+    searchQuerySharedFlow: SharedFlow<String>,
+    searchResultStateFlow: StateFlow<List<Contact>>,
+    showSearchBarStateFlow: StateFlow<Boolean>,
+    onQueryChanged: (String) -> Unit = {},
+    onSearchClicked: () -> Unit = {},
+    onSearchClosed: () -> Unit = {},
+    onCheckClicked: () -> Unit = {},
     onFabClick: () -> Unit = {},
     onContactClick: (Contact) -> Unit = {},
     onRemoveContactConfirmed: (Contact) -> Unit = {}
@@ -224,16 +147,16 @@ fun MainScaffold(
     Scaffold(
         topBar = {
             val showSearchBar by showSearchBarStateFlow.collectAsStateWithLifecycle()
-            val query by contactSearchQuerySharedFlow.collectAsStateWithLifecycle("")
+            val query by searchQuerySharedFlow.collectAsStateWithLifecycle("")
 
             MainToolBar(
                 showSearchBar = showSearchBar,
                 query = query,
                 onCheckClicked = onCheckClicked,
-                onSearchClicked = { showSearchBarStateFlow.value = true },
-                onQueryChanged = { contactSearchQuerySharedFlow.tryEmit(it) },
-                onSearchClosed = { showSearchBarStateFlow.value = false },
-                contactSearchResultStateFlow = contactSearchResultStateFlow,
+                onQueryChanged = onQueryChanged,
+                onSearchClicked = onSearchClicked,
+                onSearchClosed = onSearchClosed,
+                contactSearchResultStateFlow = searchResultStateFlow,
                 onContactClick = onContactClick,
                 onRemoveContactConfirmed = onRemoveContactConfirmed
             )
@@ -255,7 +178,7 @@ fun MainScaffold(
         },
         content = { innerPadding ->
             MainContent(
-                contactList = contactList,
+                contactListStateFlow = contactListStateFlow,
                 modifier = Modifier.padding(innerPadding),
                 onItemClick = onContactClick,
                 onRemoveContactConfirmed = onRemoveContactConfirmed
@@ -269,10 +192,10 @@ fun MainScaffold(
 fun MainToolBar(
     showSearchBar: Boolean,
     query: String,
-    onCheckClicked: () -> Unit,
-    onSearchClicked: () -> Unit,
-    onSearchClosed: () -> Unit,
-    onQueryChanged: (String) -> Unit,
+    onCheckClicked: () -> Unit = {},
+    onSearchClicked: () -> Unit = {},
+    onSearchClosed: () -> Unit = {},
+    onQueryChanged: (String) -> Unit = {},
     onContactClick: (Contact) -> Unit = {},
     onRemoveContactConfirmed: (Contact) -> Unit = {},
     contactSearchResultStateFlow: StateFlow<List<Contact>>
@@ -304,7 +227,7 @@ fun MainToolBar(
                 )
             } else {
                 MainContent(
-                    contactList = contactSearchResult,
+                    contactListStateFlow = contactSearchResultStateFlow,
                     onItemClick = onContactClick,
                     onRemoveContactConfirmed = onRemoveContactConfirmed
                 )
@@ -329,7 +252,7 @@ fun MainToolBar(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainContent(
-    contactList: List<Contact>,
+    contactListStateFlow: StateFlow<List<Contact>>,
     modifier: Modifier = Modifier,
     onItemClick: (Contact) -> Unit = {},
     onRemoveContactConfirmed: (Contact) -> Unit = {}
@@ -372,6 +295,8 @@ fun MainContent(
             }
         )
     }
+
+    val contactList by contactListStateFlow.collectAsStateWithLifecycle()
 
     LazyColumn(modifier = modifier.fillMaxSize()) {
         itemsIndexed(
@@ -422,13 +347,16 @@ fun MainContent(
 fun MainPreview() {
     ContentProviderPhonebookTheme {
         MainScaffold(
-            contactList = listOf(
-                Contact(1, "Teste", "123456789"),
-                Contact(2, null, "987654321"),
-                Contact(3, "Teste 3", ""),
+            contactListStateFlow =
+            MutableStateFlow(
+                listOf(
+                    Contact(1, "Teste", "123456789"),
+                    Contact(2, null, "987654321"),
+                    Contact(3, "Teste 3", ""),
+                )
             ),
-            contactSearchQuerySharedFlow = MutableStateFlow(""),
-            contactSearchResultStateFlow = MutableStateFlow(emptyList()),
+            searchQuerySharedFlow = MutableStateFlow(""),
+            searchResultStateFlow = MutableStateFlow(emptyList()),
             showSearchBarStateFlow = MutableStateFlow(false),
             onCheckClicked = {},
         )
@@ -441,10 +369,6 @@ fun ToolBarSearchPreview() {
     MainToolBar(
         showSearchBar = true,
         query = "",
-        onCheckClicked = {},
-        onSearchClicked = {},
-        onQueryChanged = {},
-        onSearchClosed = {},
         contactSearchResultStateFlow = MutableStateFlow(
             listOf(
                 Contact(1, "Test", "123456789"),
@@ -460,11 +384,7 @@ fun ToolBarSearchPreview() {
 fun ToolBarEmptySearchPreview() {
     MainToolBar(
         showSearchBar = true,
-        onCheckClicked = {},
         query = "Query",
-        onSearchClicked = {},
-        onQueryChanged = {},
-        onSearchClosed = {},
         contactSearchResultStateFlow = MutableStateFlow(emptyList())
     )
 }
@@ -474,11 +394,7 @@ fun ToolBarEmptySearchPreview() {
 fun ToolBarPreview() {
     MainToolBar(
         showSearchBar = false,
-        onCheckClicked = {},
         query = "",
-        onSearchClicked = {},
-        onQueryChanged = {},
-        onSearchClosed = {},
         contactSearchResultStateFlow = MutableStateFlow(emptyList())
     )
 }

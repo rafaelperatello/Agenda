@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.contentprovider.ContactProvider.Contacts.CONTENT_URI
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_BIRTHDAY
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_EMAIL
@@ -24,6 +23,7 @@ import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_ID
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_NAME
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_PHONE
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_PHONE2
+import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 
 class ContentProviderActivity : AppCompatActivity() {
 
@@ -51,7 +51,7 @@ class ContentProviderActivity : AppCompatActivity() {
             }
         }
 
-        //Insert
+        // Insert
         val values = ContentValues().apply {
             put(KEY_NAME, "Reader")
             put(KEY_PHONE, "123456")
@@ -65,7 +65,7 @@ class ContentProviderActivity : AppCompatActivity() {
 
         queryAll()
 
-        //Update
+        // Update
         val valuesUpdate = ContentValues()
         valuesUpdate.put(KEY_NAME, "João da Silva")
 
@@ -79,13 +79,13 @@ class ContentProviderActivity : AppCompatActivity() {
             queryAll()
         }
 
-        //Delete
+        // Delete
         val resultDelete = contentResolver.delete(resultInsert, null, null)
         Log.d("READER:", "Delete last insert: $resultDelete")
     }
 
     private fun queryAll() {
-        //Query all
+        // Query all
         val cursor = contentResolver.query(CONTENT_URI, null, null, null, null)
         cursor.use {
             while (cursor?.moveToNext() == true) {
