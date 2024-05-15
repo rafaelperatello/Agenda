@@ -42,6 +42,7 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         listenSearchTokenChanges()
+        refreshContactList()
     }
 
     fun onSearchClicked() {
@@ -80,7 +81,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    private suspend fun refreshContactList() {
+    private fun refreshContactList() {
         refreshJobContacts.cancel()
         refreshJobContacts = viewModelScope.launch {
             _contactList.value = contactDao.searchAllContacts()
