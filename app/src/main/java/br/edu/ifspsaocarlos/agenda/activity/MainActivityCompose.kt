@@ -1,6 +1,5 @@
 package br.edu.ifspsaocarlos.agenda.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.edu.ifspsaocarlos.agenda.R
+import br.edu.ifspsaocarlos.agenda.activity.compose.ContactFormBottomSheet
 import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.data.ContactDAO
 import br.edu.ifspsaocarlos.agenda.model.Contact
@@ -80,25 +82,52 @@ class MainActivityCompose : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ContentProviderPhonebookTheme {
+                var contact by remember { mutableStateOf<Contact?>(null) }
+                var showSheet by remember { mutableStateOf(false) }
+                if (showSheet) {
+                    ContactFormBottomSheet(
+                        contact = contact,
+                        onDismissRequest = {
+                            showSheet = false
+                            contact = null
+                        },
+                        onSaveContactClicked = {
+                            if (contact == null) {
+                                saveNewContact(it)
+                            } else {
+                                updateContact(it)
+                            }
+                            showSheet = false
+                            contact = null
+                        },
+                    )
+                }
+
                 MainScaffold(
                     contactList = contactList.value,
                     contactSearchQuerySharedFlow = contactSearchQueryStateFlow,
                     contactSearchResultStateFlow = contactSearchResultStateFlow,
                     showSearchBarStateFlow = showSearchBarStateFlow,
-                    onFabClick = { showNewContact(this) },
-                    onContactClick = { showAddContact(this, it) },
+                    onCheckClicked = {
+                        showContentProviderActivity()
+                    },
+                    onFabClick = {
+                        contact = null
+                        showSheet = true
+                    },
+                    onContactClick = {
+                        contact = it
+                        showSheet = true
+                    },
                     onRemoveContactConfirmed = {
                         removeContact(it)
-                        if (showSearchBarStateFlow.value) {
-                            contactSearchQueryStateFlow.tryEmit(contactSearchQueryStateFlow.replayCache.firstOrNull() ?: "")
-                        }
                     }
                 )
             }
         }
 
         refreshDataWhenReady()
-        listenToSearchTokenChanges()
+        listenSearchTokenChanges()
         listenSearchBarVisibilityChanges()
     }
 
@@ -112,7 +141,7 @@ class MainActivityCompose : ComponentActivity() {
         }
     }
 
-    private fun listenToSearchTokenChanges() {
+    private fun listenSearchTokenChanges() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 contactSearchQueryStateFlow.collectLatest {
@@ -134,26 +163,43 @@ class MainActivityCompose : ComponentActivity() {
         }
     }
 
-    private fun showNewContact(context: Context) {
-        val intent = Intent(context, DetailActivity::class.java)
-        context.startActivity(intent)
+    private fun saveNewContact(contact: Contact) {
+        lifecycleScope.launch {
+            contactDAO.createContactSuspend(contact)
+            refreshContactList()
+        }
     }
 
-    private fun showAddContact(context: Context, contact: Contact) {
-        val intent = Intent(context, DetailActivity::class.java)
-        intent.putExtra("contact", contact) // Todo change to const
-        context.startActivity(intent)
+    private fun updateContact(contact: Contact) {
+        lifecycleScope.launch {
+            contactDAO.updateContactSuspend(contact)
+            refreshContactList()
+            maybeRefreshSearch()
+        }
     }
 
     private fun removeContact(contact: Contact) {
         lifecycleScope.launch {
             contactDAO.deleteContactSuspend(contact)
             refreshContactList()
+            maybeRefreshSearch()
         }
     }
 
     private suspend fun refreshContactList() {
         contactList.value = contactDAO.searchAllContactsSuspend()
+    }
+
+    private fun maybeRefreshSearch() {
+        if (showSearchBarStateFlow.value) {
+            contactSearchQueryStateFlow.tryEmit(contactSearchQueryStateFlow.replayCache.firstOrNull() ?: "")
+        }
+    }
+
+    private fun showContentProviderActivity() {
+        Intent(this, ContentProviderActivity::class.java).also {
+            startActivity(it)
+        }
     }
 }
 
@@ -163,6 +209,7 @@ fun MainScaffold(
     contactSearchQuerySharedFlow: MutableSharedFlow<String>,
     contactSearchResultStateFlow: StateFlow<List<Contact>>,
     showSearchBarStateFlow: MutableStateFlow<Boolean>,
+    onCheckClicked: () -> Unit,
     onFabClick: () -> Unit = {},
     onContactClick: (Contact) -> Unit = {},
     onRemoveContactConfirmed: (Contact) -> Unit = {}
@@ -175,6 +222,7 @@ fun MainScaffold(
             MainToolBar(
                 showSearchBar = showSearchBar,
                 query = query,
+                onCheckClicked = onCheckClicked,
                 onSearchClicked = { showSearchBarStateFlow.value = true },
                 onQueryChanged = { contactSearchQuerySharedFlow.tryEmit(it) },
                 onSearchClosed = { showSearchBarStateFlow.value = false },
@@ -190,7 +238,7 @@ fun MainScaffold(
             }
         },
         content = { innerPadding ->
-            MainBody(
+            MainContent(
                 contactList = contactList,
                 modifier = Modifier.padding(innerPadding),
                 onItemClick = onContactClick,
@@ -205,6 +253,7 @@ fun MainScaffold(
 fun MainToolBar(
     showSearchBar: Boolean,
     query: String,
+    onCheckClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onSearchClosed: () -> Unit,
     onQueryChanged: (String) -> Unit,
@@ -238,7 +287,7 @@ fun MainToolBar(
                         .padding(16.dp)
                 )
             } else {
-                MainBody(
+                MainContent(
                     contactList = contactSearchResult,
                     onItemClick = onContactClick,
                     onRemoveContactConfirmed = onRemoveContactConfirmed
@@ -250,6 +299,9 @@ fun MainToolBar(
             title = { Text(stringResource(id = R.string.app_name)) },
             colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
             actions = {
+                IconButton(onClick = onCheckClicked) {
+                    Icon(Icons.Filled.Check, null)
+                }
                 IconButton(onClick = onSearchClicked) {
                     Icon(Icons.Filled.Search, null)
                 }
@@ -260,7 +312,7 @@ fun MainToolBar(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainBody(
+fun MainContent(
     contactList: List<Contact>,
     modifier: Modifier = Modifier,
     onItemClick: (Contact) -> Unit = {},
@@ -279,7 +331,8 @@ fun MainBody(
                 Text(
                     stringResource(
                         id = R.string.remove_contact_confirmation,
-                        currentContact.value?.name?.takeIf { it.isNotBlank() } ?: stringResource(id = R.string.empty_name))
+                        currentContact.value?.name?.takeIf { it.isNotBlank() } ?: stringResource(id = R.string.empty_name)
+                    )
                 )
             },
             confirmButton = {
@@ -315,7 +368,6 @@ fun MainBody(
                         onItemClick(item)
                     },
                     onLongClick = {
-                        // Todo
                     }
                 ),
                 leadingContent = {
@@ -361,7 +413,8 @@ fun MainPreview() {
             ),
             contactSearchQuerySharedFlow = MutableStateFlow(""),
             contactSearchResultStateFlow = MutableStateFlow(emptyList()),
-            showSearchBarStateFlow = MutableStateFlow(false)
+            showSearchBarStateFlow = MutableStateFlow(false),
+            onCheckClicked = {},
         )
     }
 }
@@ -372,6 +425,7 @@ fun ToolBarSearchPreview() {
     MainToolBar(
         showSearchBar = true,
         query = "",
+        onCheckClicked = {},
         onSearchClicked = {},
         onQueryChanged = {},
         onSearchClosed = {},
@@ -390,6 +444,7 @@ fun ToolBarSearchPreview() {
 fun ToolBarEmptySearchPreview() {
     MainToolBar(
         showSearchBar = true,
+        onCheckClicked = {},
         query = "Query",
         onSearchClicked = {},
         onQueryChanged = {},
@@ -403,6 +458,7 @@ fun ToolBarEmptySearchPreview() {
 fun ToolBarPreview() {
     MainToolBar(
         showSearchBar = false,
+        onCheckClicked = {},
         query = "",
         onSearchClicked = {},
         onQueryChanged = {},

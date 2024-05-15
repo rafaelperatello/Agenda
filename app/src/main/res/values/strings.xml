@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Agenda</string>
-    <string name="title_activity_main_compose">MainActivityCompose</string>
 
     <string name="title_activity_detalhe">Novo contato</string>
 
@@ -10,10 +9,22 @@
     <string name="remove_contact">Remove contact</string>
     <string name="remove_contact_confirmation">Do you want to remove contact %1$s</string>
 
+    <string name="edit_contact">Edit contact</string>
+    <string name="new_contact">New contact</string>
+
     <string name="empty_name">Empty name</string>
     <string name="empty_phone">Empty phone</string>
 
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="name">Name</string>
+    <string name="phone_1">Phone 1</string>
+    <string name="phone_2">Phone 2</string>
+    <string name="email">E-mail</string>
+    <string name="birthday">Birthday</string>
+
+    <string name="name_required">Name is required</string>
 
 </resources>
