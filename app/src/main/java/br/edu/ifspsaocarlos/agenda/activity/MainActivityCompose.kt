@@ -56,7 +56,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.activity.compose.ContactFormBottomSheet
 import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
-import br.edu.ifspsaocarlos.agenda.data.ContactDAO
+import br.edu.ifspsaocarlos.agenda.data.ContactDao
 import br.edu.ifspsaocarlos.agenda.model.Contact
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -67,7 +67,7 @@ import kotlinx.coroutines.launch
 
 class MainActivityCompose : ComponentActivity() {
 
-    private val contactDAO: ContactDAO by lazy { ContactDAO(this.applicationContext) }
+    private val contactDAO: ContactDao by lazy { ContactDao(this.applicationContext) }
     private val contactList = mutableStateOf<List<Contact>>(emptyList())
 
     private val contactSearchQueryStateFlow = MutableSharedFlow<String>(

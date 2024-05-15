@@ -18,7 +18,7 @@ private val projection = arrayOf(
     ContactsTable.KEY_EMAIL
 )
 
-class ContactDAO(context: Context) {
+class ContactDao(context: Context) {
 
     private val database: SQLiteDatabase by lazy {
         Database.getDatabase(context)
