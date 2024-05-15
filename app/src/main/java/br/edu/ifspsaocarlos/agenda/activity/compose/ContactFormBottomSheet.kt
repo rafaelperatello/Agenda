@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -86,13 +87,13 @@ fun ContactFormBottomSheet(
                 .padding(16.dp, 16.dp, 16.dp, bottomPadding)
         ) {
 
-            var nameIsInvalid by remember { mutableStateOf(false) }
+            var nameIsInvalid by rememberSaveable { mutableStateOf(false) }
 
-            var name by remember { mutableStateOf(contact?.name ?: "") }
-            var phone by remember { mutableStateOf(contact?.phone ?: "") }
-            var phone2 by remember { mutableStateOf(contact?.phone2 ?: "") }
-            var email by remember { mutableStateOf(contact?.email ?: "") }
-            var birthday by remember { mutableStateOf(contact?.birthday ?: "") }
+            var name by rememberSaveable { mutableStateOf(contact?.name ?: "") }
+            var phone by rememberSaveable { mutableStateOf(contact?.phone ?: "") }
+            var phone2 by rememberSaveable { mutableStateOf(contact?.phone2 ?: "") }
+            var email by rememberSaveable { mutableStateOf(contact?.email ?: "") }
+            var birthday by rememberSaveable { mutableStateOf(contact?.birthday ?: "") }
 
             val titleRes = if (contact != null) R.string.edit_contact else R.string.new_contact
             Text(
