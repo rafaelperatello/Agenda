@@ -18,11 +18,7 @@ private val projection = arrayOf(
     ContactsTable.KEY_EMAIL
 )
 
-class ContactDao(context: Context) {
-
-    private val database: SQLiteDatabase by lazy {
-        Database.getDatabase(context)
-    }
+class ContactDao(private val database: SQLiteDatabase) {
 
     suspend fun searchAllContacts(): List<Contact> {
         return withContext(Dispatchers.IO) {

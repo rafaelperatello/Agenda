@@ -7,17 +7,20 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import br.edu.ifspsaocarlos.agenda.data.Database
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_ID
+import dagger.hilt.android.EntryPointAccessors
 
 class ContactProvider : ContentProvider() {
 
-    private val database: SQLiteDatabase by lazy {
-        Database.getDatabase(requireNotNull(this.context))
-    }
+    private lateinit var database: SQLiteDatabase
 
     override fun onCreate(): Boolean {
+        context?.applicationContext?.let {
+            val entryPoint = EntryPointAccessors.fromApplication(it, ContactProviderEntryPoint::class.java)
+            database = entryPoint.database
+        }
+
         return true
     }
 

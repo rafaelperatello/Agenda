@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.dagger.hilt.android'
 
 android {
     namespace = "br.edu.ifspsaocarlos.agenda"
@@ -41,6 +43,9 @@ android {
 }
 
 dependencies {
+    implementation "com.google.dagger:hilt-android:2.51.1"
+    kapt "com.google.dagger:hilt-compiler:2.51.1"
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
 
     implementation "androidx.lifecycle:lifecycle-runtime-compose"
@@ -59,4 +64,8 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
+
+kapt {
+    correctErrorTypes true
 }

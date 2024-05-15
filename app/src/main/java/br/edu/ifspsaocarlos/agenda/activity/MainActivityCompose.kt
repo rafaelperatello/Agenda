@@ -58,16 +58,20 @@ import br.edu.ifspsaocarlos.agenda.activity.compose.ContactFormBottomSheet
 import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.data.ContactDao
 import br.edu.ifspsaocarlos.agenda.model.Contact
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivityCompose : ComponentActivity() {
 
-    private val contactDAO: ContactDao by lazy { ContactDao(this.applicationContext) }
+    @Inject lateinit var contactDAO: ContactDao
+
     private val contactList = mutableStateOf<List<Contact>>(emptyList())
 
     private val contactSearchQueryStateFlow = MutableSharedFlow<String>(
