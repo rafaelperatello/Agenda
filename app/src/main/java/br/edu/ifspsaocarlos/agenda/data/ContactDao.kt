@@ -1,7 +1,6 @@
 package br.edu.ifspsaocarlos.agenda.data
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
@@ -33,14 +32,14 @@ class ContactDao(private val database: SQLiteDatabase) {
                 ContactsTable.KEY_NAME
             )
 
-            if (cursor != null) {
-                cursor.moveToFirst()
-                while (!cursor.isAfterLast) {
+            cursor?.use {
+                it.moveToFirst()
+                while (!it.isAfterLast) {
                     contacts.add(cursor.getContact())
-                    cursor.moveToNext()
+                    it.moveToNext()
                 }
-                cursor.close()
             }
+
             contacts
         }
     }
@@ -59,14 +58,14 @@ class ContactDao(private val database: SQLiteDatabase) {
                 ContactsTable.KEY_NAME
             )
 
-            if (cursor != null) {
-                cursor.moveToFirst()
+            cursor?.use {
+                it.moveToFirst()
                 while (!cursor.isAfterLast) {
                     contacts.add(cursor.getContact())
-                    cursor.moveToNext()
+                    it.moveToNext()
                 }
-                cursor.close()
             }
+
             contacts
         }
     }
