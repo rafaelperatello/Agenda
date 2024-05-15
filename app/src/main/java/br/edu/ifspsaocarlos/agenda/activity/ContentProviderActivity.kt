@@ -3,8 +3,20 @@ package br.edu.ifspsaocarlos.agenda.activity
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import br.edu.ifspsaocarlos.agenda.R
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.contentprovider.ContactProvider.Contacts.CONTENT_URI
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_BIRTHDAY
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_EMAIL
@@ -17,15 +29,36 @@ class ContentProviderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_content_provider)
+
+        enableEdgeToEdge()
+        setContent {
+            ContentProviderPhonebookTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.primaryContainer
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .safeDrawingPadding()
+                            .padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        text = "Content Provider Validator",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+            }
+        }
 
         //Insert
-        val values = ContentValues()
-        values.put(KEY_NAME, "Reader")
-        values.put(KEY_PHONE, "123456")
-        values.put(KEY_PHONE2, "654321")
-        values.put(KEY_BIRTHDAY, "01/03/05")
-        values.put(KEY_EMAIL, "reader@reader.com.br")
+        val values = ContentValues().apply {
+            put(KEY_NAME, "Reader")
+            put(KEY_PHONE, "123456")
+            put(KEY_PHONE2, "654321")
+            put(KEY_BIRTHDAY, "01/03/05")
+            put(KEY_EMAIL, "reader@reader.com.br")
+        }
 
         val resultInsert = contentResolver.insert(CONTENT_URI, values) ?: throw Exception("Insert failed")
         Log.d("READER:", "Insert return: $resultInsert")

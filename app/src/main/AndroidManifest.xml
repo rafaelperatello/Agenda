@@ -26,7 +26,10 @@
             android:authorities="br.edu.ifspsaocarlos.agenda.provider"
             android:exported="true" />
 
-        <activity android:name=".activity.ContentProviderActivity" />
+        <activity
+            android:name=".activity.ContentProviderActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
