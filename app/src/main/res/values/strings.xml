@@ -18,6 +18,7 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="discard">Discard</string>
 
     <string name="name">Name</string>
     <string name="phone_1">Phone 1</string>
@@ -26,5 +27,8 @@
     <string name="birthday">Birthday</string>
 
     <string name="name_required">Name is required</string>
+
+    <string name="discard_changes">Discard changes</string>
+    <string name="changes_will_be_lost">Changes will be lost</string>
 
 </resources>

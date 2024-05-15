@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,17 +50,20 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.edu.ifspsaocarlos.agenda.R
 import br.edu.ifspsaocarlos.agenda.data.model.Contact
+import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactFormBottomSheet(
     contact: Contact? = null,
-    onDismissRequest: () -> Unit,
-    onSaveContactClicked: (Contact) -> Unit,
+    onDismissRequest: () -> Unit = {},
+    onSaveContactClicked: (Contact) -> Unit = {},
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -66,6 +71,29 @@ fun ContactFormBottomSheet(
 
     val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val coroutineScope = rememberCoroutineScope()
+
+    var contentChanged by rememberSaveable { mutableStateOf(false) }
+    var showConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showConfirmationDialog = false },
+            title = { Text(text = stringResource(id = R.string.discard_changes)) },
+            text = { Text(stringResource(id = R.string.changes_will_be_lost)) },
+            confirmButton = {
+                TextButton(
+                    onClick = { onDismissRequest() }) {
+                    Text(stringResource(R.string.discard))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showConfirmationDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -78,116 +106,154 @@ fun ContactFormBottomSheet(
         dragHandle = { BottomSheetDefaults.DragHandle() },
         windowInsets = WindowInsets.ime,
     ) {
-        val scrollState = rememberScrollState()
+        ContactFormContent(
+            contact = contact,
+            bottomPadding = bottomPadding,
+            onContentChanged = { contentChanged = true },
+            onDismissRequest = {
+                if (contentChanged) {
+                    showConfirmationDialog = true
+                } else {
+                    onDismissRequest()
+                }
+            },
+            onSaveContactClicked = onSaveContactClicked
+        )
+    }
+}
 
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .fillMaxWidth()
-                .padding(16.dp, 16.dp, 16.dp, bottomPadding)
+@Composable
+private fun ContactFormContent(
+    contact: Contact?,
+    bottomPadding: Dp,
+    onContentChanged: () -> Unit = {},
+    onDismissRequest: () -> Unit = {},
+    onSaveContactClicked: (Contact) -> Unit = {}
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .fillMaxWidth()
+            .padding(16.dp, 16.dp, 16.dp, bottomPadding)
+    ) {
+
+        var nameIsInvalid by rememberSaveable { mutableStateOf(false) }
+
+        var name by rememberSaveable { mutableStateOf(contact?.name ?: "") }
+        var phone by rememberSaveable { mutableStateOf(contact?.phone ?: "") }
+        var phone2 by rememberSaveable { mutableStateOf(contact?.phone2 ?: "") }
+        var email by rememberSaveable { mutableStateOf(contact?.email ?: "") }
+        var birthday by rememberSaveable { mutableStateOf(contact?.birthday ?: "") }
+
+        val titleRes = if (contact != null) R.string.edit_contact else R.string.new_contact
+        Text(
+            text = stringResource(id = titleRes),
+            modifier = Modifier.padding(bottom = 16.dp),
+            style = MaterialTheme.typography.headlineSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        CustomOutlineText(
+            text = name,
+            label = stringResource(id = R.string.name),
+            maxSize = 50,
+            supportText = if (nameIsInvalid) stringResource(id = R.string.name_required) else null,
+            isError = nameIsInvalid,
+            leadingIcon = Icons.Default.Person,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+            onValueChange = {
+                onContentChanged()
+                name = it
+                nameIsInvalid = it.isBlank()
+            }
+        )
+
+        CustomOutlineText(
+            text = phone,
+            label = stringResource(id = R.string.phone_1),
+            maxSize = 20,
+            leadingIcon = Icons.Default.Phone,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
+            onValueChange = {
+                onContentChanged()
+                phone = it
+            }
+        )
+
+        CustomOutlineText(
+            text = phone2,
+            label = stringResource(id = R.string.phone_2),
+            maxSize = 20,
+            leadingIcon = Icons.Default.Phone,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
+            onValueChange = {
+                onContentChanged()
+                phone2 = it
+            }
+        )
+
+        CustomOutlineText(
+            text = email,
+            label = stringResource(id = R.string.email),
+            maxSize = 50,
+            leadingIcon = Icons.Default.Email,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+            onValueChange = {
+                onContentChanged()
+                email = it
+            }
+        )
+
+        CustomOutlineText(
+            text = birthday,
+            label = stringResource(id = R.string.birthday),
+            maxSize = 8,
+            leadingIcon = Icons.Default.DateRange,
+            visualTransformation = DateTransformation(),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+            onValueChange = {
+                onContentChanged()
+                birthday = it
+            }
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
         ) {
-
-            var nameIsInvalid by rememberSaveable { mutableStateOf(false) }
-
-            var name by rememberSaveable { mutableStateOf(contact?.name ?: "") }
-            var phone by rememberSaveable { mutableStateOf(contact?.phone ?: "") }
-            var phone2 by rememberSaveable { mutableStateOf(contact?.phone2 ?: "") }
-            var email by rememberSaveable { mutableStateOf(contact?.email ?: "") }
-            var birthday by rememberSaveable { mutableStateOf(contact?.birthday ?: "") }
-
-            val titleRes = if (contact != null) R.string.edit_contact else R.string.new_contact
-            Text(
-                text = stringResource(id = titleRes),
-                modifier = Modifier.padding(bottom = 16.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            CustomOutlineText(
-                text = name,
-                label = stringResource(id = R.string.name),
-                maxSize = 50,
-                supportText = if (nameIsInvalid) stringResource(id = R.string.name_required) else null,
-                isError = nameIsInvalid,
-                leadingIcon = Icons.Default.Person,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
-                onValueChange = {
-                    name = it
-                    nameIsInvalid = it.isBlank()
-                }
-            )
-
-            CustomOutlineText(
-                text = phone,
-                label = stringResource(id = R.string.phone_1),
-                maxSize = 20,
-                leadingIcon = Icons.Default.Phone,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
-                onValueChange = { phone = it }
-            )
-
-            CustomOutlineText(
-                text = phone2,
-                label = stringResource(id = R.string.phone_2),
-                maxSize = 20,
-                leadingIcon = Icons.Default.Phone,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
-                onValueChange = { phone2 = it }
-            )
-
-            CustomOutlineText(
-                text = email,
-                label = stringResource(id = R.string.email),
-                maxSize = 50,
-                leadingIcon = Icons.Default.Email,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
-                onValueChange = { email = it }
-            )
-
-            CustomOutlineText(
-                text = birthday,
-                label = stringResource(id = R.string.birthday),
-                maxSize = 8,
-                leadingIcon = Icons.Default.DateRange,
-                visualTransformation = DateTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
-                onValueChange = { birthday = it }
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
+            FilledTonalButton(
+                modifier = Modifier.padding(8.dp),
+                onClick = {
+                    onDismissRequest()
+                },
             ) {
-                FilledTonalButton(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = onDismissRequest,
-                ) {
-                    Text(stringResource(id = R.string.cancel))
-                }
+                Text(stringResource(id = R.string.cancel))
+            }
 
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = {
-                        if (name.isBlank()) {
-                            nameIsInvalid = true
-                            return@Button
-                        }
+            Button(
+                modifier = Modifier.padding(8.dp),
+                onClick = {
+                    if (name.isBlank()) {
+                        nameIsInvalid = true
+                        return@Button
+                    }
 
-                        val newContact = Contact(
-                            id = contact?.id ?: 0L,
-                            name = name,
-                            phone = phone,
-                            phone2 = phone2,
-                            email = email,
-                            birthday = birthday,
-                        )
+                    val newContact = Contact(
+                        id = contact?.id ?: 0L,
+                        name = name,
+                        phone = phone,
+                        phone2 = phone2,
+                        email = email,
+                        birthday = birthday,
+                    )
 
-                        onSaveContactClicked(newContact)
-                    },
-                ) {
-                    Text(stringResource(id = R.string.save))
-                }
+                    onSaveContactClicked(newContact)
+                },
+            ) {
+                Text(stringResource(id = R.string.save))
             }
         }
     }
@@ -276,5 +342,22 @@ private class DateTransformation() : VisualTransformation {
         }
 
         return TransformedText(AnnotatedString(out), numberOffsetTranslator)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ContactFormContentPreview() {
+    ContentProviderPhonebookTheme {
+        ContactFormContent(
+            contact = Contact(
+                id = 1,
+                name = "John Doe",
+                phone = "123456789",
+                phone2 = "987654321",
+                email = "e@mail.com"
+            ),
+            bottomPadding = 16.dp,
+        )
     }
 }

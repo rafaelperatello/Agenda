@@ -260,12 +260,8 @@ fun MainContent(
     val currentContact = rememberSaveable { mutableStateOf<Contact?>(null) }
     if (currentContact.value != null) {
         AlertDialog(
-            onDismissRequest = {
-                currentContact.value = null
-            },
-            title = {
-                Text(text = stringResource(id = R.string.remove_contact))
-            },
+            onDismissRequest = { currentContact.value = null },
+            title = { Text(text = stringResource(id = R.string.remove_contact)) },
             text = {
                 Text(
                     stringResource(
@@ -287,9 +283,7 @@ fun MainContent(
             },
             dismissButton = {
                 TextButton(
-                    onClick = {
-                        currentContact.value = null
-                    }) {
+                    onClick = { currentContact.value = null }) {
                     Text(stringResource(R.string.cancel))
                 }
             }
