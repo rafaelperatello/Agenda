@@ -1,4 +1,4 @@
-package br.edu.ifspsaocarlos.agenda.activity.compose
+package br.edu.ifspsaocarlos.agenda.ui.activity.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +50,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import br.edu.ifspsaocarlos.agenda.R
-import br.edu.ifspsaocarlos.agenda.model.Contact
+import br.edu.ifspsaocarlos.agenda.data.model.Contact
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package br.edu.ifspsaocarlos.agenda.activity.ui.theme
+package br.edu.ifspsaocarlos.agenda.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

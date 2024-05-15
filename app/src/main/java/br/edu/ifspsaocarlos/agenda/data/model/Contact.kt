@@ -1,4 +1,4 @@
-package br.edu.ifspsaocarlos.agenda.model
+package br.edu.ifspsaocarlos.agenda.data.model
 
 import java.io.Serializable
 

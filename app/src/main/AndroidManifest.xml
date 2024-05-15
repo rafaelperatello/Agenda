@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.MainActivityCompose"
+            android:name="br.edu.ifspsaocarlos.agenda.ui.activity.MainActivityCompose"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
@@ -28,7 +28,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".activity.ContentProviderActivity"
+            android:name="br.edu.ifspsaocarlos.agenda.ui.activity.ContentProviderActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

@@ -1,4 +1,4 @@
-package br.edu.ifspsaocarlos.agenda.activity
+package br.edu.ifspsaocarlos.agenda.ui.activity
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -54,10 +54,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.edu.ifspsaocarlos.agenda.R
-import br.edu.ifspsaocarlos.agenda.activity.compose.ContactFormBottomSheet
-import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
+import br.edu.ifspsaocarlos.agenda.ui.activity.compose.ContactFormBottomSheet
+import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.data.ContactDao
-import br.edu.ifspsaocarlos.agenda.model.Contact
+import br.edu.ifspsaocarlos.agenda.data.model.Contact
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow

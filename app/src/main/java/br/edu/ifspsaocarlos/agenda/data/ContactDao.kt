@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable
-import br.edu.ifspsaocarlos.agenda.model.Contact
+import br.edu.ifspsaocarlos.agenda.data.model.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

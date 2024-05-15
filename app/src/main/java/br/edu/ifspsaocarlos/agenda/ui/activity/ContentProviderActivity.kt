@@ -1,4 +1,4 @@
-package br.edu.ifspsaocarlos.agenda.activity
+package br.edu.ifspsaocarlos.agenda.ui.activity
 
 import android.content.ContentValues
 import android.os.Bundle
@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import br.edu.ifspsaocarlos.agenda.activity.ui.theme.ContentProviderPhonebookTheme
+import br.edu.ifspsaocarlos.agenda.ui.theme.ContentProviderPhonebookTheme
 import br.edu.ifspsaocarlos.agenda.contentprovider.ContactProvider.Contacts.CONTENT_URI
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_BIRTHDAY
 import br.edu.ifspsaocarlos.agenda.data.Database.ContactsTable.KEY_EMAIL
